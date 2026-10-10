@@ -1,0 +1,276 @@
+1. 一级菜单.html（HTML 结构 + 自定义 CSS）
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一级水平导航菜单</title>
+    <style>
+        /* ==================================================================
+           实验3  CSS布局实战——导航菜单
+           一级菜单.html  ——  HTML 结构一行未改，全部效果由本段 CSS 完成
+           ================================================================== */
+ 
+        /* ---------- 0. 通配选择器 + 继承：清掉浏览器默认内外边距 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            /* 盒模型：padding / border 计入宽度，方便计算导航项尺寸 */
+            box-sizing: border-box;
+        }
+ 
+        body {
+            /* 继承：font-family、color、font-size 会被子元素继承 */
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            color: #2c3e50;
+            background: #f4f6f9;
+            padding: 60px 20px;
+        }
+ 
+        /* ---------- 1. 元素选择器 table：导航条整体外观 ---------- */
+        table {
+            /* 行内表格元素，用 margin 实现水平居中（table 上 text-align 对自身无效） */
+            margin: 0 auto;
+            background: #2c3e50;
+            border-collapse: collapse;   /* 合并单元格边框，去掉默认间隙 */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(44, 62, 80, 0.25);
+        }
+ 
+        /* ---------- 2. 后代选择器 table td：每个菜单单元 ---------- */
+        table td {
+            padding: 0;                  /* 内边距交给里面的 a，保证整块可点击 */
+            text-align: center;          /* 文字水平居中 */
+            border-right: 1px solid rgba(255, 255, 255, 0.08);  /* 分隔线 */
+        }
+ 
+        /* 最后一个单元格不要右分隔线 */
+        table td:last-child {
+            border-right: none;
+        }
+ 
+        /* ---------- 3. 后代选择器 table td a：菜单链接 ---------- */
+        table td a {
+            display: block;              /* 块级化，让 padding 撑满整个单元格 */
+            padding: 16px 22px;          /* 盒模型：撑开可点击区域 */
+            color: #ecf0f1;              /* 文字颜色 */
+            font-size: 16px;
+            text-decoration: none;       /* 去掉超链接下划线 */
+            white-space: nowrap;         /* 菜单文字不换行 */
+            border-bottom: 3px solid transparent;   /* 预留底部高亮条，避免悬停抖动 */
+            transition: background-color .3s, color .3s, border-color .3s;
+        }
+ 
+        /* ---------- 4. :hover 伪类：鼠标悬停改变背景与文字颜色 ---------- */
+        table td:hover {
+            background: #1abc9c;
+        }
+ 
+        table td:hover a {
+            color: #ffffff;
+            border-bottom-color: #f1c40f;
+        }
+ 
+        /* ---------- 5. 并集选择器（逗号）：首项设为"当前页"高亮，与 hover 共用样式 ---------- */
+        table td:first-child,
+        table td:hover {
+            background: #1abc9c;
+        }
+ 
+        table td:first-child a {
+            color: #ffffff;
+            font-weight: bold;
+            border-bottom-color: #f1c40f;
+        }
+    </style>
+</head>
+<body>
+    <table align="center">
+        <tr>           
+            <td><a href="#">首页</a></td>
+            <td><a href="#">教学院(部)</a></td>
+            <td><a href="#">党群机构</a></td>
+            <td><a href="#">行政教辅机构</a></td>
+            <td><a href="#">教学科研</a></td>
+            <td><a href="#">招生就业</a></td>
+            <td><a href="#">国际交流</a></td>
+            <td><a href="#">数字图书馆</a></td>
+        </tr>
+    </table>
+ 
+</body>
+</html>
+
+
+
+2. 二级菜单.html（HTML 结构 + 自定义 CSS）
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二级水平导航菜单</title>
+    <style>
+        /* ==================================================================
+           实验3  CSS布局实战——导航菜单
+           二级菜单.html  ——  HTML 结构一行未改，全部效果由本段 CSS 完成
+           核心：position: relative + position: absolute 实现二级菜单下拉定位
+           ================================================================== */
+ 
+        /* ---------- 0. 通配选择器 + 继承：清掉浏览器默认内外边距 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            color: #2c3e50;
+            background: #f4f6f9;
+            padding: 60px 20px;
+        }
+ 
+        /* ---------- 1. logo 横幅：类选择器 .logo ---------- */
+        ul:first-of-type {
+            max-width: 1000px;
+            margin: 0 auto 12px;
+            list-style: none;
+            background: #1a252f;
+            border-radius: 10px 10px 0 0;
+        }
+ 
+        ul:first-of-type .logo {
+            padding: 18px 24px;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+ 
+        /* ---------- 2. 元素选择器 ul：导航条整体外观 ---------- */
+        ul:nth-of-type(2) {
+            max-width: 1000px;
+            margin: 0 auto;
+            list-style: none;        /* 去掉列表小圆点 */
+            display: flex;           /* 方案一：flex 让一级菜单水平排列 */
+            background: #2c3e50;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 8px 20px rgba(44, 62, 80, 0.25);
+        }
+ 
+        /* 方案二（等价写法）：ul:nth-of-type(2) { font-size: 0; }
+                             ul:nth-of-type(2) > li { display: inline-block; font-size: 16px; } */
+ 
+        /* ---------- 3. 一级菜单项 li：既是菜单单元，也是二级菜单的"定位父元素" ---------- */
+        ul:nth-of-type(2) > li {
+            position: relative;      /* ★ 参照点：二级菜单以它为基准做绝对定位 */
+            flex: 1;                 /* 均分宽度 */
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+ 
+        ul:nth-of-type(2) > li:last-child {
+            border-right: none;
+        }
+ 
+        /* ---------- 4. 一级菜单链接：盒模型 padding 撑开点击区域 ---------- */
+        ul:nth-of-type(2) > li > a {
+            display: block;
+            padding: 16px 12px;
+            color: #ecf0f1;
+            font-size: 16px;
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: background-color .3s, color .3s, border-color .3s;
+        }
+ 
+        /* 有二级菜单的一级项，文字后加小三角提示 */
+        ul:nth-of-type(2) > li > ul + a::after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 6px;
+            vertical-align: middle;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ecf0f1;   /* CSS 三角形箭头 ▾ */
+        }
+ 
+        /* ---------- 5. :hover 伪类：一级菜单悬停变色 ---------- */
+        ul:nth-of-type(2) > li:hover {
+            background: #1abc9c;
+        }
+ 
+        ul:nth-of-type(2) > li:hover > a {
+            color: #ffffff;
+            border-bottom-color: #f1c40f;
+        }
+ 
+        /* ---------- 6. 二级菜单：position:absolute 定位到所属一级项正下方 ---------- */
+        ul:nth-of-type(2) > li > ul {
+            position: absolute;      /* ★ 相对最近的定位祖先（一级 li）定位 */
+            top: 100%;               /* 紧贴一级菜单项的下边缘 */
+            left: 0;
+            min-width: 100%;         /* 至少与一级项同宽 */
+            width: max-content;      /* 文字长时自动撑开 */
+            list-style: none;
+            background: #34495e;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            display: none;           /* 默认隐藏：不占位、不可点击 */
+            z-index: 999;            /* 浮在上层，不被其他内容遮挡 */
+        }
+ 
+        }
+ 
+        /* ---------- 7. 二级菜单项样式 ---------- */
+        ul:nth-of-type(2) > li > ul li a {
+            display: block;
+            padding: 12px 20px;
+            color: #dfe6e9;
+            font-size: 15px;
+            text-align: left;
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background-color .25s, color .25s, padding-left .25s;
+        }
+ 
+        /* 二级菜单悬停效果（后代选择器 + 伪类组合） */
+        ul:nth-of-type(2) > li > ul li:hover a {
+            background: #1abc9c;
+            color: #ffffff;
+            padding-left: 28px;      /* 悬停时文字右移，形成位移反馈 */
+        }
+ 
+        /* ---------- 8. 关键交互：悬停一级菜单项时显示二级菜单 ---------- */
+        ul:nth-of-type(2) > li:hover > ul {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li class="logo">欢迎访问湖南文理学院</li>
+    </ul>
+    <ul>         
+        <li><a href="#">首页</a></li>
+        <li><a href="#">教学院(部)</a>
+            <ul>
+                <li><a href="#">计算机与电气工程学院</a></li>
+                <li><a href="#">芙蓉学院</a></li>
+            </ul>
+        </li>
+        <li><a href="#">党群机构</a></li>        
+        <li><a href="#">行政教辅机构</a></li>
+        <li><a href="#">教学科研</a></li>
+        <li><a href="#">招生就业</a></li>
+        <li><a href="#">国际交流</a></li>
+        <li><a href="#">数字图书馆</a></li>
+    </ul>    
+</body>
+</html>
